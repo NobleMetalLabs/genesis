@@ -51,6 +51,7 @@ func _init(_event_processor : EventProcessor) -> void:
 func _to_string() -> String: return "GameAccess(%s)" % [event_processor]
 
 var _cards : Array[ICardInstance] = []
+var _players : Array[Player] = []
 var _player_decks : Dictionary = {} # [Player, Array[ICardInstance]]
 var _player_fields : Dictionary = {} # [Player, Array[ICardInstance]]
 var _player_hands : Dictionary = {} # [Player, Array[ICardInstance]]
@@ -58,14 +59,17 @@ var _player_hands : Dictionary = {} # [Player, Array[ICardInstance]]
 func add_card(card : ICardInstance) -> void:
 	_cards.append(card)
 
+func add_player(player : Player) -> void:
+	_players.append(player)
+
 func get_players_field(player : Player) -> Array[ICardInstance]:
-	return []
+	return _player_fields.get(player, [] as Array[ICardInstance])
 
 func get_players_hand(player : Player) -> Array[ICardInstance]:
-	return []
+	return _player_hands.get(player, [] as Array[ICardInstance])
 
 func get_players_deck(player : Player) -> Array[ICardInstance]:
-	return []
+	return _player_decks.get(player, [] as Array[ICardInstance])
 
 func are_two_cards_friendly(card1 : ICardInstance, card2 : ICardInstance) -> bool:
 	return card1.player == card2.player
