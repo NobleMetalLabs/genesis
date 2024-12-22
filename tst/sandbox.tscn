@@ -1,17 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://8ug3p85pm4sh"]
+[gd_scene load_steps=11 format=3 uid="uid://8ug3p85pm4sh"]
 
 [ext_resource type="Script" path="res://addons/command-terminal/src/CommandTerminal.gd" id="1_7mbqb"]
 [ext_resource type="Script" path="res://tst/sandbox_menu.gd" id="1_iuema"]
 [ext_resource type="Script" path="res://tst/cards-tree.gd" id="2_fwa0a"]
+[ext_resource type="Script" path="res://tst/zones-tree.gd" id="2_uonai"]
 [ext_resource type="FontFile" uid="uid://cmmltma2gsu3a" path="res://addons/command-terminal/ast/windows_command_prompt.ttf" id="2_yvhsy"]
 [ext_resource type="PackedScene" uid="uid://b5b8i4p40f5ua" path="res://addons/command-terminal/scn/command_terminal_guts.tscn" id="3_asx5f"]
 [ext_resource type="Script" path="res://tst/events-tree.gd" id="3_gii7x"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bkg77"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
+[sub_resource type="LabelSettings" id="LabelSettings_i8303"]
+font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_iohyr"]
+font_size = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3nmgc"]
 bg_color = Color(0, 0, 0, 1)
@@ -25,88 +26,203 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iuema")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 2
-offset_right = 1920.0
-offset_bottom = 1080.0
-size_flags_vertical = 3
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_bkg77")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
-text = "GAME TICK"
-
-[node name="GameTickSpinBox" type="SpinBox" parent="PanelContainer/VBoxContainer/PanelContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 0.0
-
-[node name="HBoxContainer" type="HSplitContainer" parent="PanelContainer/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-split_offset = -370
 
-[node name="CardsTree" type="Tree" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+
+[node name="HBoxContainer" type="HSplitContainer" parent="VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+split_offset = -1630
+
+[node name="Control" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  ZONES"
+label_settings = SubResource("LabelSettings_i8303")
+vertical_alignment = 1
+
+[node name="ZonesTree" type="Tree" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Control/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+hide_root = true
+select_mode = 1
+script = ExtResource("2_uonai")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+split_offset = 490
+
+[node name="Control" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer"]
+clip_contents = true
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+text = "  CARDS"
+label_settings = SubResource("LabelSettings_i8303")
+vertical_alignment = 1
+
+[node name="CardsTree" type="Tree" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
 columns = 4
 hide_root = true
 select_mode = 1
 script = ExtResource("2_fwa0a")
 
-[node name="EventsTree" type="Tree" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Issue Event"
+label_settings = SubResource("LabelSettings_iohyr")
+
+[node name="IssueEventMenuButton" type="MenuButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+text = "Select Event"
+flat = false
+item_count = 5
+popup/item_0/text = "WAS_ACTIVATED"
+popup/item_0/id = 3
+popup/item_1/text = "WAS_BURNED"
+popup/item_2/text = "WAS_DISCARDED"
+popup/item_2/id = 4
+popup/item_3/text = "WAS_MARKED"
+popup/item_3/id = 1
+popup/item_4/text = "WAS_UNMARKED"
+popup/item_4/id = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Drag Event"
+label_settings = SubResource("LabelSettings_iohyr")
+
+[node name="DragEventOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Attacked"
+popup/item_1/text = "Targeted"
+popup/item_1/id = 2
+popup/item_2/text = "Killed"
+popup/item_2/id = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_right = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "  EVENTS"
+label_settings = SubResource("LabelSettings_i8303")
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2/MarginContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "GAMETICK"
+
+[node name="GameTickSpinBox" type="SpinBox" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2/MarginContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 0.0
+
+[node name="ResetButton" type="Button" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Reset Sandbox"
+
+[node name="EventsTree" type="Tree" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
 hide_root = true
 select_mode = 1
 script = ExtResource("3_gii7x")
 
-[node name="ResetButton" type="Button" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -233.0
-offset_top = -119.0
-offset_bottom = -34.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 40
-text = "reset"
-
-[node name="CommandTerminal" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -34.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="CommandTerminal" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1920, 45)
+layout_mode = 2
 script = ExtResource("1_7mbqb")
 font = ExtResource("2_yvhsy")
-font_size = 30
+font_size = 36
 
-[node name="__guts__" parent="CommandTerminal" instance=ExtResource("3_asx5f")]
+[node name="__guts__" parent="VBoxContainer/CommandTerminal" instance=ExtResource("3_asx5f")]
+custom_minimum_size = Vector2(1920, 15)
 layout_mode = 0
 anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-grow_horizontal = 1
-grow_vertical = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_3nmgc")

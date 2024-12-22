@@ -5,6 +5,8 @@ var sandbox : Sandbox
 @onready var game_tick_spinbox : SpinBox = $"%GameTickSpinBox"
 const TPS := 30.0
 
+@onready var ct : CommandTerminal = self.find_child("CommandTerminal", true, false)
+
 func _ready() -> void: 
 	reset_sandbox()
 	AUTO_EXEC()
@@ -17,12 +19,12 @@ func _ready() -> void:
 	#add_child(tick_timer)
 	#tick_timer.start(1 / TPS)
 	
-	$CommandTerminal.guts.terminal_panel.command_ran.connect(
+	ct.guts.terminal_panel.command_ran.disconnect(CommandServer.run_command)
+	ct.guts.terminal_panel.command_ran.connect(
 		func(command : String) -> void:
 			sandbox.game_access_manager.action_manager.request_action(CommandAction.setup(command, sandbox.game_access_manager._current_gametick))
 	)
 	
-	$CommandTerminal.guts.terminal_panel.command_ran.disconnect(CommandServer.run_command)
 
 func AUTO_EXEC() -> void:
 	sandbox.game_access_manager.advance_gametick()
@@ -58,5 +60,6 @@ func update_data(gametick : int = -1) -> void:
 	
 	#if gametick != -1:
 		#game_access = sandbox.game_access_manager._game_access_by_gametick[gametick]
-	$"%CardsTree".display_cards(game_access._cards)
+	$"%CardsTree".display_cards(game_access)
 	$"%EventsTree".display_event_history(game_access.event_history)
+	$"%ZonesTree".display_players(game_access)

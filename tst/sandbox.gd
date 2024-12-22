@@ -42,6 +42,7 @@ func _new_player(num : int) -> Player:
 	var player : Player = Player.setup(Deck.EMPTY)
 	player.name = "P%d" % [num]
 	players[num] = player
+	game_access.add_player(player)
 	return player
 
 func issue_simple_event_to_card(uid : int, event_type : StringName) -> void:
