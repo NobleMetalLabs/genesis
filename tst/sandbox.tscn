@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://8ug3p85pm4sh"]
+[gd_scene load_steps=12 format=3 uid="uid://8ug3p85pm4sh"]
 
 [ext_resource type="Script" path="res://addons/command-terminal/src/CommandTerminal.gd" id="1_7mbqb"]
 [ext_resource type="Script" path="res://tst/sandbox_menu.gd" id="1_iuema"]
@@ -11,6 +11,9 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_i8303"]
 font_size = 32
+
+[sub_resource type="LabelSettings" id="LabelSettings_iohyr"]
+font_size = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3nmgc"]
 bg_color = Color(0, 0, 0, 1)
@@ -45,18 +48,28 @@ layout_mode = 2
 size_flags_vertical = 3
 split_offset = -1630
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "  ZONES"
 label_settings = SubResource("LabelSettings_i8303")
 vertical_alignment = 1
 
-[node name="ZonesTree" type="Tree" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="ZonesTree" type="Tree" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/Control/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -69,17 +82,26 @@ script = ExtResource("2_uonai")
 layout_mode = 2
 split_offset = 490
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer"]
+[node name="Control" type="Control" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer"]
+clip_contents = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 1
 text = "  CARDS"
 label_settings = SubResource("LabelSettings_i8303")
 vertical_alignment = 1
 
-[node name="CardsTree" type="Tree" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/VBoxContainer"]
+[node name="CardsTree" type="Tree" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -87,6 +109,34 @@ columns = 4
 hide_root = true
 select_mode = 1
 script = ExtResource("2_fwa0a")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Drag Event"
+label_settings = SubResource("LabelSettings_iohyr")
+
+[node name="DragEventOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Attacked"
+popup/item_1/text = "Targeted"
+popup/item_1/id = 2
+popup/item_2/text = "Killed"
+popup/item_2/id = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer"]
 layout_mode = 2
