@@ -71,6 +71,7 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	var source_item : TreeItem = data
+	if source_item.get_tree() != self: return false
 	drop_mode_flags = Tree.DROP_MODE_ON_ITEM
 	var target_section := get_drop_section_at_position(at_position)
 	if target_section == -100:
