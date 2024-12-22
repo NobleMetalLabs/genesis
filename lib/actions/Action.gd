@@ -3,7 +3,7 @@ extends Serializeable
 
 # TODO: (like years from now) replays and huh button.
 
-var player_peer_id : int = MultiplayerManager.network_player.peer_id
+var player_peer_id : int = MultiplayerManager.get_peer_id()
 var gametick : int
 
 func _init() -> void:

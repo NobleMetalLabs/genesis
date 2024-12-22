@@ -113,7 +113,7 @@ func _handle_was_attacked(event : WasAttackedEvent) -> void:
 	if verbose: print("%s was attacked by %s for %s" % [event.card, event.by_who, event.damage])
 	var health : int = IStatisticPossessor.id(event.card).get_statistic(Genesis.Statistic.HEALTH)
 	var new_health : int = health - event.damage
-	game_access.request_event(SetStatisticEvent.new(event.by_who, Genesis.Statistic.HEALTH, new_health))
+	game_access.request_event(SetStatisticEvent.new(event.card, Genesis.Statistic.HEALTH, new_health))
 	
 	if new_health <= 0:
 		game_access.request_event(KilledEvent.new(event.by_who, event.card))

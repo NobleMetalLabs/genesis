@@ -38,6 +38,7 @@ func is_instance_server() -> bool:
 	return multiplayer.get_unique_id() == 1
 
 func get_peer_id() -> int:
+	if network_player == null: return 0
 	return network_player.peer_id
 
 func get_num_players() -> int:
