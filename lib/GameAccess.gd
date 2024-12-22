@@ -17,27 +17,27 @@ func _init(_event_processor : EventProcessor) -> void:
 	event_processing_step_manager._register_bulk(
 		[
 			EventProcessingStep.new(
-				AllCardsTargetGroup.new(), "ENTERED_DECK", self, HANDLE_ZONE_TRANSITION_EVENT_FOR_GAMEACCESS, 
+				AllCardsTargetGroup.new(), "ENTERED_DECK", self, HANDLE_ZONE_TRANSITION_EVENT, 
 				EventPriority.new().STAGE(EventPriority.PROCESSING_STAGE.EVENT).INDIVIDUAL(EventPriority.PROCESSING_INDIVIDUAL_MIN)
 			),
 			EventProcessingStep.new(
-				AllCardsTargetGroup.new(), "LEFT_DECK", self, HANDLE_ZONE_TRANSITION_EVENT_FOR_GAMEACCESS, 
+				AllCardsTargetGroup.new(), "LEFT_DECK", self, HANDLE_ZONE_TRANSITION_EVENT, 
 				EventPriority.new().STAGE(EventPriority.PROCESSING_STAGE.EVENT).INDIVIDUAL(EventPriority.PROCESSING_INDIVIDUAL_MIN)
 			),
 			EventProcessingStep.new(
-				AllCardsTargetGroup.new(), "ENTERED_FIELD", self, HANDLE_ZONE_TRANSITION_EVENT_FOR_GAMEACCESS, 
+				AllCardsTargetGroup.new(), "ENTERED_FIELD", self, HANDLE_ZONE_TRANSITION_EVENT, 
 				EventPriority.new().STAGE(EventPriority.PROCESSING_STAGE.EVENT).INDIVIDUAL(EventPriority.PROCESSING_INDIVIDUAL_MIN)
 			),
 			EventProcessingStep.new(
-				AllCardsTargetGroup.new(), "LEFT_FIELD", self, HANDLE_ZONE_TRANSITION_EVENT_FOR_GAMEACCESS, 
+				AllCardsTargetGroup.new(), "LEFT_FIELD", self, HANDLE_ZONE_TRANSITION_EVENT, 
 				EventPriority.new().STAGE(EventPriority.PROCESSING_STAGE.EVENT).INDIVIDUAL(EventPriority.PROCESSING_INDIVIDUAL_MIN)
 			),
 			EventProcessingStep.new(
-				AllCardsTargetGroup.new(), "ENTERED_HAND", self, HANDLE_ZONE_TRANSITION_EVENT_FOR_GAMEACCESS, 
+				AllCardsTargetGroup.new(), "ENTERED_HAND", self, HANDLE_ZONE_TRANSITION_EVENT, 
 				EventPriority.new().STAGE(EventPriority.PROCESSING_STAGE.EVENT).INDIVIDUAL(EventPriority.PROCESSING_INDIVIDUAL_MIN)
 			),
 			EventProcessingStep.new(
-				AllCardsTargetGroup.new(), "LEFT_HAND", self, HANDLE_ZONE_TRANSITION_EVENT_FOR_GAMEACCESS, 
+				AllCardsTargetGroup.new(), "LEFT_HAND", self, HANDLE_ZONE_TRANSITION_EVENT, 
 				EventPriority.new().STAGE(EventPriority.PROCESSING_STAGE.EVENT).INDIVIDUAL(EventPriority.PROCESSING_INDIVIDUAL_MIN)
 			),
 			EventProcessingStep.new(
@@ -80,8 +80,24 @@ func are_all_cards_friendly(cards : Array[ICardInstance]) -> bool:
 			return false
 	return true
 
-func HANDLE_ZONE_TRANSITION_EVENT_FOR_GAMEACCESS(event : Event) -> void:
+func HANDLE_ZONE_TRANSITION_EVENT(event : Event) -> void:
 	var card : ICardInstance = event.card
+	match event.event_type:
+		"ENTERED_DECK", "ENTERED_FIELD", "ENTERED_HAND":
+			var card_stats := IStatisticPossessor.id(card)
+			var pull_event : Event
+			if card_stats.get_statistic(Genesis.Statistic.IS_ON_FIELD):
+				pull_event = LeftFieldEvent.new(card)
+			elif card_stats.get_statistic(Genesis.Statistic.IS_IN_HAND):
+				pull_event = LeftHandEvent.new(card)
+			elif card_stats.get_statistic(Genesis.Statistic.IS_IN_DECK):
+				pull_event = LeftDeckEvent.new(card)
+			
+			if pull_event:
+				request_event(pull_event)
+				if pull_event.has_failed:
+					return
+			
 	var player_cards : Array[ICardInstance] = []
 	if event is EnteredDeckEvent:
 		_player_decks.get_or_add(card.player, player_cards).append(card)

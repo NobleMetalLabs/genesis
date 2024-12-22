@@ -7,7 +7,7 @@ func _ready() -> void:
 	self.set_column_expand(0, true)
 	self.set_column_expand_ratio(0, 1)
 
-var _object_to_treeitem : Dictionary = {} #[Object, TreeItem]
+var _treeitem_to_object : Dictionary = {} #[TreeItem, Object]
 
 var game_access : GameAccess
 func display_players(_game_access : GameAccess) -> void:
@@ -15,12 +15,12 @@ func display_players(_game_access : GameAccess) -> void:
 	var players : Array[Player] = game_access._players
 	if not self.visible: return
 	self.clear()
-	_object_to_treeitem.clear()
+	_treeitem_to_object.clear()
 	var root : TreeItem = self.create_item(null)
 	for player : Player in players:
 		var player_item : TreeItem = self.create_item(root)
 		setup_player_row(player_item, player)
-		_object_to_treeitem[player] = player_item
+		_treeitem_to_object[player_item] = player
 
 func setup_player_row(item : TreeItem, player : Player) -> void:
 	item.set_text(0, str(player))
@@ -42,15 +42,11 @@ func setup_zone_row(item : TreeItem, player : Player, zone : StringName) -> void
 			cards = game_access.get_players_hand(player)
 		_:
 			return
-
-	if cards.size() == 0:
-		item.visible = false
-		return
 	
 	for card : ICardInstance in cards:
 		var card_item : TreeItem = self.create_item(item)
 		setup_card_row(card_item, card)
-		_object_to_treeitem[card] = card_item
+		_treeitem_to_object[card_item] = card
 
 
 func setup_card_row(item : TreeItem, card : ICardInstance) -> void:
@@ -58,3 +54,57 @@ func setup_card_row(item : TreeItem, card : ICardInstance) -> void:
 	if card == null:
 		push_warning("Card is null.")
 		return
+
+# https://forum.godotengine.org/t/dragging-treeitems-within-tree-control-node/42393
+func _get_drag_data(_at_position: Vector2) -> Variant:
+	var selected : TreeItem = get_next_selected(null)
+	if selected == null: return null
+	var selected_object : Variant = _treeitem_to_object.get(selected)
+	if not selected_object is ICardInstance: return null
+
+	# var v := VBoxContainer.new()
+	# var l := Label.new()
+	# l.text = "  %s" % selected.get_text(0)
+	# v.add_child(l)
+	# set_drag_preview(v)
+	return selected
+
+func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+	var source_item : TreeItem = data
+	drop_mode_flags = Tree.DROP_MODE_ON_ITEM
+	var target_section := get_drop_section_at_position(at_position)
+	if target_section == -100:
+		return false
+	#var source_object : Variant = _treeitem_to_object.get(source_items[0])
+
+	var target_item : TreeItem = get_item_at_position(at_position)
+	var target_object : Variant = _treeitem_to_object.get(target_item)
+	if target_object == null:
+		var target_parent : TreeItem = target_item.get_parent()
+		var target_parent_object : Variant = _treeitem_to_object.get(target_parent)
+		if target_parent_object is Player:
+			return true
+		return false
+	if target_item == source_item: return false
+	if target_object is Player: return false
+	if target_object is ICardInstance: return false
+	return true
+
+func _drop_data(at_position: Vector2, data: Variant) -> void:
+	var source_item : TreeItem = data
+	var target_section := get_drop_section_at_position(at_position)
+	if target_section == -100: return 
+	var target_item : TreeItem = get_item_at_position(at_position)
+	var source_object : Variant = _treeitem_to_object.get(source_item)
+	if not source_object is ICardInstance: return
+	var source_card : ICardInstance = source_object as ICardInstance
+	var target_text : String = target_item.get_text(0)
+	match target_text:
+		"DECK":
+			game_access.request_event(EnteredDeckEvent.new(source_card))
+		"FIELD":
+			game_access.request_event(EnteredFieldEvent.new(source_card))
+		"HAND":
+			game_access.request_event(EnteredHandEvent.new(source_card))
+		_:
+			push_warning("Unknown target zone: %s" % target_text)
