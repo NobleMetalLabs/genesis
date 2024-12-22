@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://8ug3p85pm4sh"]
+[gd_scene load_steps=11 format=3 uid="uid://8ug3p85pm4sh"]
 
 [ext_resource type="Script" path="res://addons/command-terminal/src/CommandTerminal.gd" id="1_7mbqb"]
 [ext_resource type="Script" path="res://tst/sandbox_menu.gd" id="1_iuema"]
@@ -7,7 +7,6 @@
 [ext_resource type="FontFile" uid="uid://cmmltma2gsu3a" path="res://addons/command-terminal/ast/windows_command_prompt.ttf" id="2_yvhsy"]
 [ext_resource type="PackedScene" uid="uid://b5b8i4p40f5ua" path="res://addons/command-terminal/scn/command_terminal_guts.tscn" id="3_asx5f"]
 [ext_resource type="Script" path="res://tst/events-tree.gd" id="3_gii7x"]
-[ext_resource type="Script" path="res://addons/command-terminal/src/CommandTerminalGuts.gd" id="8_re6qd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_i8303"]
 font_size = 32
@@ -116,16 +115,46 @@ layout_mode = 2
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Drag Event"
+text = "Issue Event"
 label_settings = SubResource("LabelSettings_iohyr")
 
-[node name="DragEventOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="IssueEventMenuButton" type="MenuButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Event"
+flat = false
+item_count = 5
+popup/item_0/text = "WAS_ACTIVATED"
+popup/item_0/id = 3
+popup/item_1/text = "WAS_BURNED"
+popup/item_2/text = "WAS_DISCARDED"
+popup/item_2/id = 4
+popup/item_3/text = "WAS_MARKED"
+popup/item_3/id = 1
+popup/item_4/text = "WAS_UNMARKED"
+popup/item_4/id = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Drag Event"
+label_settings = SubResource("LabelSettings_iohyr")
+
+[node name="DragEventOptionButton" type="OptionButton" parent="VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/HSplitContainer/Control/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -192,13 +221,8 @@ script = ExtResource("1_7mbqb")
 font = ExtResource("2_yvhsy")
 font_size = 36
 
-[node name="__guts__" type="PanelContainer" parent="VBoxContainer/CommandTerminal" instance=ExtResource("3_asx5f")]
+[node name="__guts__" parent="VBoxContainer/CommandTerminal" instance=ExtResource("3_asx5f")]
 custom_minimum_size = Vector2(1920, 15)
 layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_3nmgc")
-script = ExtResource("8_re6qd")
-metadata/_edit_lock_ = true

@@ -1,5 +1,6 @@
 extends Tree
 
+@onready var issue_event_menu_button : Button = get_parent().get_node("%IssueEventMenuButton")
 @onready var drag_event_option_button : OptionButton = get_parent().get_node("%DragEventOptionButton")
 
 func _ready() -> void:
@@ -17,6 +18,17 @@ func _ready() -> void:
 	self.set_column_title(3, "Meta")
 	self.set_column_expand(3, true)
 	self.set_column_expand_ratio(3, 1)
+
+	issue_event_menu_button.get_popup().index_pressed.connect(
+		func issue_event_to_selected(index : int) -> void:
+			var selected : TreeItem = get_next_selected(null)
+			if selected == null: return
+			var selected_object : Variant = _treeitem_to_object.get(selected)
+			if not selected_object is ICardInstance: return
+			var selected_card : ICardInstance = selected_object
+			var event_type : StringName = issue_event_menu_button.get_popup().get_item_text(index)
+			game_access.request_event(Event.new_from_type(event_type, [selected_card]))
+	)
 
 var _treeitem_to_object : Dictionary = {} #[TreeItem, Object]
 

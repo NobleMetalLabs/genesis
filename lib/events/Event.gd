@@ -66,6 +66,27 @@ static func new_from_type(type : StringName, event_args : Array[Variant]) -> Eve
 			if not card : return null
 			if not who : return null
 			return TargetedEvent.new(card, who)
+		# ...
+		"WAS_ACTIVATED":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return WasActivatedEvent.new(card)
+		"WAS_BURNED":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return WasBurnedEvent.new(card)
+		"WAS_DISCARDED":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return WasDiscardedEvent.new(card)
+		"WAS_MARKED":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return WasMarkedEvent.new(card)
+		"WAS_UNMARKED":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return WasUnmarkedEvent.new(card)
 		_:
 			push_error("Unknown event type: %s" % type)
 			return null
