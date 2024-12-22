@@ -38,10 +38,10 @@ func setup_card_row(item : TreeItem, card : ICardInstance) -> void:
 	if card == null:
 		push_warning("Card is null.")
 		return
-	var req_stats := IStatisticPossessor.id(card)
-	var in_deck : bool = req_stats.get_statistic(Genesis.Statistic.IS_IN_DECK)
-	var in_hand : bool = req_stats.get_statistic(Genesis.Statistic.IS_IN_HAND)
-	var on_field : bool = req_stats.get_statistic(Genesis.Statistic.IS_ON_FIELD)
+	var card_stats := IStatisticPossessor.id(card)
+	var in_deck : bool = card_stats.get_statistic(Genesis.Statistic.IS_IN_DECK)
+	var in_hand : bool = card_stats.get_statistic(Genesis.Statistic.IS_IN_HAND)
+	var on_field : bool = card_stats.get_statistic(Genesis.Statistic.IS_ON_FIELD)
 	var state_sum : int = (in_deck as int) + (in_hand as int) + (on_field as int)
 	if state_sum == 0:
 		item.set_text(2, "!!!NONE")
@@ -54,3 +54,13 @@ func setup_card_row(item : TreeItem, card : ICardInstance) -> void:
 			item.set_text(2, "FIELD")
 	else:
 		item.set_text(2, "!!!MULTIPLE")
+
+	for stat : Genesis.Statistic in card_stats._statistic_db.keys():
+		var stat_item : TreeItem = self.create_item(item)
+		setup_statistic_row(stat_item, stat, card_stats.get_statistic(stat))
+
+	item.collapsed = true
+
+func setup_statistic_row(item : TreeItem, stat : Genesis.Statistic, value : Variant) -> void:
+	item.set_text(1, Genesis.Statistic.keys()[stat])
+	item.set_text(3, str(value))
