@@ -41,6 +41,13 @@ func display_event_history(_history : EventHistory) -> void:
 			if event in already_logged: continue
 			setup_event_item(tick_parent, event)
 
+	var last_item : TreeItem = self.get_root()
+	var last_item_children : Array[TreeItem] = last_item.get_children()
+	while last_item_children.size() > 0:
+		last_item = last_item_children.back()
+		last_item_children = last_item.get_children()
+	self.scroll_to_item(last_item, true)
+
 func setup_event_item(parent : TreeItem, event : Event) -> void:
 	var item : TreeItem = self.create_item(parent)
 	object_to_treeitem[event] = item
