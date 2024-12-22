@@ -9,6 +9,7 @@ func _init(event_processing_step_manager : EventProcessingStepManager, event_his
 
 var requested_events : Array[Event] = []
 func request_event(_event : Event) -> void:
+	if _event == null: return
 	if currently_processing_events:
 		process_event(_event, current_delta_recorder)
 	else:

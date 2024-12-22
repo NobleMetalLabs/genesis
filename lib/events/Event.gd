@@ -26,3 +26,46 @@ static func get_event_property_names_of_cards(event : Event) -> Array[StringName
 			return prop_dict["name"]
 	))
 	return property_names
+
+# TODO: complete this
+static func new_from_type(type : StringName, event_args : Array[Variant]) -> Event:
+	match(type):
+		"ATTACKED":
+			var card : ICardInstance = event_args.pop_front()
+			var who : ICardInstance = event_args.pop_front()
+			var damage_v : Variant = event_args.pop_front()
+			if not card : return null
+			if not who : return null
+			var damage : int = 1
+			if damage_v is int: damage = damage_v
+			return AttackedEvent.new(card, who, damage)
+		# ...
+		"ENTERED_DECK":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return EnteredDeckEvent.new(card)
+		"ENTERED_FIELD":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return EnteredFieldEvent.new(card)
+		"ENTERED_HAND":
+			var card : ICardInstance = event_args.pop_front()
+			if not card : return null
+			return EnteredHandEvent.new(card)
+		# ...
+		"KILLED":
+			var card : ICardInstance = event_args.pop_front()
+			var who : ICardInstance = event_args.pop_front()
+			if not card : return null
+			if not who : return null
+			return KilledEvent.new(card, who)
+		# ...
+		"TARGETED":
+			var card : ICardInstance = event_args.pop_front()
+			var who : ICardInstance = event_args.pop_front()
+			if not card : return null
+			if not who : return null
+			return TargetedEvent.new(card, who)
+		_:
+			push_error("Unknown event type: %s" % type)
+			return null

@@ -99,12 +99,4 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	if not source_object is ICardInstance: return
 	var source_card : ICardInstance = source_object as ICardInstance
 	var target_text : String = target_item.get_text(0)
-	match target_text:
-		"DECK":
-			game_access.request_event(EnteredDeckEvent.new(source_card))
-		"FIELD":
-			game_access.request_event(EnteredFieldEvent.new(source_card))
-		"HAND":
-			game_access.request_event(EnteredHandEvent.new(source_card))
-		_:
-			push_warning("Unknown target zone: %s" % target_text)
+	game_access.request_event(Event.new_from_type("ENTERED_%s" % target_text, [source_card]))

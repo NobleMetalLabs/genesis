@@ -60,6 +60,6 @@ func update_data(gametick : int = -1) -> void:
 	
 	#if gametick != -1:
 		#game_access = sandbox.game_access_manager._game_access_by_gametick[gametick]
-	$"%CardsTree".display_cards(game_access._cards)
+	$"%CardsTree".display_cards(game_access)
 	$"%EventsTree".display_event_history(game_access.event_history)
 	$"%ZonesTree".display_players(game_access)
