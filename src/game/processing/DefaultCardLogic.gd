@@ -66,7 +66,10 @@ func _handle_entered_field(event : EnteredFieldEvent) -> void:
 	if verbose: print("%s entered field of %s" % [event.card, event.card.player])
 	IStatisticPossessor.id(event.card).set_statistic(Genesis.Statistic.IS_ON_FIELD, true)
 	
-	game_access.request_event(SetCooldownEvent.new(event.card, Cooldown.new(game_access, event.card, Genesis.CooldownType.SSICKNESS, 10)))
+	var ssickness_cooldown := Cooldown.new(game_access, event.card, Genesis.CooldownType.SSICKNESS, false, 100)
+	ssickness_cooldown.cooldown_finished.connect(ssickness_cooldown._teardown)
+	
+	game_access.request_event(SetCooldownEvent.new(event.card, ssickness_cooldown))
 	return
 
 func _handle_left_field(event : LeftFieldEvent) -> void:

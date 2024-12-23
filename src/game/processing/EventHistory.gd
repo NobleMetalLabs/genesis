@@ -45,9 +45,6 @@ func set_current_gametick(gametick : int) -> void:
 
 var _processing_events_stack : Array[Event] = []
 func _signal_begin_processing_event(event : Event) -> void:
-	var gametick_events : Array[Event] = []
-	_events_by_gametick.get_or_add(_current_gametick, gametick_events).append(event)
-	
 	var causer_event : Event = null
 	if _current_processing_step_stack.size() > 0:
 		causer_event = _processing_events_stack.back()
@@ -74,7 +71,14 @@ func _signal_end_processing_step() -> void:
 	_current_processing_step_stack.pop_back()
 
 func _signal_end_processing_event() -> void:
-	_processing_events_stack.pop_back()
+	var event : Event = _processing_events_stack.pop_back()
+	var gametick_events : Array[Event] = []
+	if _event_processing_records[event].processing_steps.is_empty():
+		_event_processing_records.erase(event)
+	else:
+		_events_by_gametick.get_or_add(_current_gametick, gametick_events).append(event)
+	
+	
 
 class EventProcessingRecord extends RefCounted:
 	var gametick : int
