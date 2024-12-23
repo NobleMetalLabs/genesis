@@ -38,6 +38,7 @@ func register_base_processing_steps() -> void:
 		EventProcessingStep.new(tg, "TOOK_MOOD", self, _handle_took_mood, pr),
 		EventProcessingStep.new(tg, "LOST_MOOD", self, _handle_lost_mood, pr),
 		EventProcessingStep.new(tg, "SET_STATISTIC", self, _handle_set_statistic, pr),
+		EventProcessingStep.new(tg, "SET_COOLDOWN", self, _handle_set_cooldown, pr),
 	])
 
 
@@ -64,6 +65,8 @@ func _handle_left_hand(event : LeftHandEvent) -> void:
 func _handle_entered_field(event : EnteredFieldEvent) -> void:
 	if verbose: print("%s entered field of %s" % [event.card, event.card.player])
 	IStatisticPossessor.id(event.card).set_statistic(Genesis.Statistic.IS_ON_FIELD, true)
+	
+	game_access.request_event(SetCooldownEvent.new(event.card, Cooldown.new(game_access, event.card, Genesis.CooldownType.SSICKNESS, 10)))
 	return
 
 func _handle_left_field(event : LeftFieldEvent) -> void:
@@ -206,6 +209,21 @@ func _handle_lost_mood(event : LostMoodEvent) -> void:
 func _handle_set_statistic(event : SetStatisticEvent) -> void:
 	if verbose: print("set statistic placeholder")
 	IStatisticPossessor.id(event.subject).set_statistic(event.statistic, event.new_value)
+	return
+
+func _handle_set_cooldown(event : SetCooldownEvent) -> void:
+	if verbose: print("set cooldown placeholder")
+	var subject_stats := IStatisticPossessor.id(event.subject)
+	var current_cooldowns : Dictionary = subject_stats.get_statistic(Genesis.Statistic.CURRENT_COOLDOWNS)
+	var existing_cooldown_with_same_type : Cooldown = current_cooldowns.get(event.cooldown.type, null)
+	
+	if existing_cooldown_with_same_type == null: current_cooldowns[event.cooldown.type] = event.cooldown
+	elif event.override_or_combine: # override
+		existing_cooldown_with_same_type.remaining_ticks = event.cooldown.remaining_ticks
+		existing_cooldown_with_same_type.total_ticks = event.cooldown.total_ticks
+	else: # combine
+		existing_cooldown_with_same_type.remaining_ticks += event.cooldown.remaining_ticks
+		existing_cooldown_with_same_type.total_ticks += event.cooldown.total_ticks
 	return
 
 # func _handle_played_card(event : PlayedCardEvent) -> void:

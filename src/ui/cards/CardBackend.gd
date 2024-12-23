@@ -19,3 +19,8 @@ func reset_stats() -> void:
 	stats.set_statistic(Genesis.Statistic.STRENGTH, ICardInstance.id(self).metadata.strength)
 	stats.set_statistic(Genesis.Statistic.SPEED, ICardInstance.id(self).metadata.speed)
 	stats.set_statistic(Genesis.Statistic.ENERGY, ICardInstance.id(self).metadata.energy)
+	
+	for statistic : Genesis.Statistic in Genesis.STATISTIC_DEFAULTS.keys():
+		var default_value : Variant = Genesis.STATISTIC_DEFAULTS[statistic]
+		if default_value is Array or default_value is Dictionary:
+			stats.set_statistic(statistic, default_value.duplicate())

@@ -66,7 +66,7 @@ func process_event(event : Event, history : EventHistory, delta_recorder : GameA
 		func get_processing_source(event_processing_step : EventProcessingStep) -> Object:
 			return event_processing_step.processing_source
 	))
-	objects_to_record.append(event.get_subject())
+	if event.get_subject() != null: objects_to_record.append(event.get_subject())
 	delta_recorder.save_objects(objects_to_record)
 	delta_recorder.save_statistics(objects_to_record)
 

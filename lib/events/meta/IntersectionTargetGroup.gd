@@ -1,4 +1,4 @@
-class_name CompositeTargetGroup
+class_name IntersectionTargetGroup
 extends BaseTargetGroup
 
 var groups : Array[BaseTargetGroup]
@@ -16,4 +16,4 @@ func _to_string() -> String:
 	var group_strings : Array[String] = []
 	for group in groups:
 		group_strings.append(group._to_string())
-	return "CompositeTargetGroup[%s]" % group_strings
+	return "IntersectionTargetGroup[%s]" % group_strings

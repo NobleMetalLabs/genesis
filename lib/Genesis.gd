@@ -245,7 +245,7 @@ const STATISTIC_DEFAULTS : Dictionary = { #[Statistic, Variant]
 	Statistic.MOST_RECENT_ATTACKED_BY : null,
 	Statistic.HAND_VISIBLE_PLAYERS : [],
 	Statistic.DECK_TOPCARD_VISIBLE_PLAYERS : [],
-	Statistic.CURRENT_COOLDOWNS : [],
+	Statistic.CURRENT_COOLDOWNS : {},
 	# Ability
 	Statistic.CAN_ATTACK : true,
 	Statistic.CAN_BE_ATTACKED : true,

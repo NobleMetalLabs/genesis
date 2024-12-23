@@ -43,7 +43,7 @@ func _init(_event_processor : EventProcessor) -> void:
 			EventProcessingStep.new(
 				AllCardsTargetGroup.new(), "WAS_CREATED", self, HANDLE_CARD_CREATION,
 				EventPriority.new().STAGE(EventPriority.PROCESSING_STAGE.EVENT).INDIVIDUAL(EventPriority.PROCESSING_INDIVIDUAL_MIN)
-			)
+			),
 		]
 	)
 	return

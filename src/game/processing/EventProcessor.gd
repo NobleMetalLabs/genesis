@@ -22,6 +22,7 @@ func process_events(delta_recorder : GameAccessDeltaRecorder) -> void:
 	current_delta_recorder = delta_recorder
 	for event : Event in requested_events:
 		process_event(event, current_delta_recorder)
+	process_event(ProcessAutomatedEvent.new(), current_delta_recorder)
 	requested_events.clear()
 	currently_processing_events = false
 
