@@ -4,6 +4,8 @@ extends RefCounted
 var event_type : StringName
 var has_failed := false
 
+signal was_processed()
+
 func _init() -> void:
 	return
 

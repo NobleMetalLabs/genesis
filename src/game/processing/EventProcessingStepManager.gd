@@ -56,7 +56,7 @@ func _unregister_bulk(event_processing_steps : Array[EventProcessingStep]) -> vo
 	for event_processing_step in event_processing_steps:
 		_processing_steps_by_event_type[event_processing_step.event_type].erase(event_processing_step)
 
-# IMPORTANT: NOTHING SHOULD EVER BE ADDED TO THIS FUNCTION. INSTEAD, IT SHOULD BE A PROCESSING STEP
+# IMPORTANT: ARE YOU ADDING TO THIS FUNCTION? SHOULD IT SHOULD BE A PROCESSING STEP INSTEAD?
 func process_event(event : Event, history : EventHistory, delta_recorder : GameAccessDeltaRecorder) -> void:
 	history._signal_begin_processing_event(event)
 	var processing_steps : Array[EventProcessingStep] = _get_processing_steps_for_event(event)
@@ -80,6 +80,7 @@ func process_event(event : Event, history : EventHistory, delta_recorder : GameA
 	delta_recorder.record_object_deltas(objects_to_record)
 	delta_recorder.record_stat_deltas(objects_to_record)
 
+	event.was_processed.emit()
 	history._signal_end_processing_event()
 
 
