@@ -18,4 +18,4 @@ static func parse_bool(value : String) -> bool:
 	return value.to_lower() == "true"
 
 static func parse_statistic(value : String) -> Genesis.Statistic:
-	return Genesis.Statistic.keys().find(value)
+	return Genesis.Statistic.keys().find(value) as Genesis.Statistic
